@@ -6,7 +6,33 @@
  * @return string
  */
 function pantheon_slack_slack_callback() {
-  dpm(func_get_args());
-  dpm($_POST);
-  return "Hello";
+  if (!isset($_POST['token']) || $_POST['token'] != variable_get('slack_slash_command_token', '')) {
+    echo "Invalid request.  Is the Slack token set correctly?";
+  } else {
+    $command_args = explode(' ', $_POST['text']);
+    if (!isset($command_args[0])) {
+      echo "Invalid request.  Include sub-command";
+    } else {
+      module_load_include('inc', 'pantheon_slack', 'pantheon_slack.terminus');
+      $command = array_shift($command_args);
+      switch ($command) {
+        case 'auth':
+          echo 'AUTH';
+          break;
+
+        case 'set-channel-default':
+          echo 'CHANNEL DEFAULT';
+          break;
+
+        case 'deploy':
+          echo 'DEPLOY';
+          break;
+
+        default:
+          echo 'HELP';
+      }
+    }
+  }
+  watchdog("DEBUG", print_r($_POST, TRUE));
+  drupal_exit();
 }
