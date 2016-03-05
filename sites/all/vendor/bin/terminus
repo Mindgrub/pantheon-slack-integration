@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+SRC_DIR="`pwd`"
+cd "`dirname "$0"`"
+cd "../pantheon-systems/terminus/bin"
+BIN_TARGET="`pwd`/terminus"
+cd "$SRC_DIR"
+"$BIN_TARGET" "$@"
