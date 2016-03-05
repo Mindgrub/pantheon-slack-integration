@@ -4,3 +4,17 @@
  * @file
  * Provide integration between Slack and Pantheon.
  */
+
+/**
+ * Implements hook_menu().
+ */
+function pantheon_slack_menu() {
+  $items = array();
+  $items['slack'] = array(
+    'title' => 'Slack callback',
+    'page callback' => 'pantheon_slack_slack_callback',
+    'access callback' => TRUE,
+    'file' => 'pantheon_slack.pages.inc',
+  );
+  return $items;
+}
