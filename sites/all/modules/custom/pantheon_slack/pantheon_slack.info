@@ -1,0 +1,8 @@
+name = Pantheon Slack
+description = "Provides integration with Slack slash commands and the Pantheon platform."
+package = Slack
+core = 7.x
+
+dependencies[] = composer_manager
+
+
