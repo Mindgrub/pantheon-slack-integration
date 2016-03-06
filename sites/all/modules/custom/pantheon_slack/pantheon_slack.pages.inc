@@ -45,10 +45,18 @@ function pantheon_slack_slack_callback() {
           break;
 
         default:
-          echo 'HELP';
+          $slack_commands = [
+            t('`/pantheon auth <machine-token>` -- Authenticate your Slack user to Pantheon.'),
+            t('`/pantheon sites` -- List all Pantheon sites your user has access to.'),
+            t('`/pantheon set-channel-default <site-name>` -- Set\'s the default site for a channel.  Useful if you have have project specific channels'),
+            t('`/pantheon get-channel-default` -- Retrieves the current default site for the current channel.'),
+            t('`/pantheon deploy <environment>` -- Deploys the default site for a channel to the specified environment (test or live).'),
+            t('`/pantheon deploy-site <site-name> <environment>` -- Deploys the specified site to the specified environment (test or live).'),
+            t('`/pantheon help` -- Displays this message.'),
+          ];
+          _pantheon_slack_send_output_to_slack(implode('\n', $slack_commands));
       }
     }
   }
-  watchdog("DEBUG", print_r($_POST, TRUE));
   drupal_exit();
 }
