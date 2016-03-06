@@ -82,6 +82,9 @@ function _pantheon_slack_terminus_authenticate_user_by_id($user_id) {
   return FALSE;
 }
 
+/**
+ * Retrieve a user's sites from Pantheon and print them for display in Slack.
+ */
 function _pantheon_slack_terminus_sites() {
   if (_pantheon_slack_terminus_authenticate_user_by_id($_POST['user_id'])) {
     $sites = new Sites();
@@ -91,7 +94,7 @@ function _pantheon_slack_terminus_sites() {
 
       $site_names[] = $site->get('name');
     }
-
+    // @TODO -- add handling for if it took > 3 seconds to get sites from Pantheon.
     echo implode('\n', $site_names);
   } else {
     // @TODO -- add handling for failed authentication and include help text.
