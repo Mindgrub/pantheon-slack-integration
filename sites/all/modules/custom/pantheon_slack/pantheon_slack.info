@@ -4,5 +4,7 @@ package = Slack
 core = 7.x
 
 dependencies[] = composer_manager
+dependencies[] = entity
+dependencies[] = pantheon_slack_feature
 
 
