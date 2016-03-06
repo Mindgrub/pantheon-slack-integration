@@ -1,5 +1,11 @@
 {
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/pantheon-systems/terminus"
+    }
+  ],
   "require": {
-    "pantheon-systems/terminus" : "0.10.5"
+    "pantheon-systems/terminus" : "dev-change/enhanced_configurator"
   }
 }

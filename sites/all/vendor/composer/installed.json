@@ -1125,17 +1125,17 @@
     },
     {
         "name": "pantheon-systems/terminus",
-        "version": "0.10.5",
-        "version_normalized": "0.10.5.0",
+        "version": "dev-change/enhanced_configurator",
+        "version_normalized": "dev-change/enhanced_configurator",
         "source": {
             "type": "git",
             "url": "https://github.com/pantheon-systems/terminus.git",
-            "reference": "7c53289d7912ec1d8b6db57d7bf450b2a720ed33"
+            "reference": "ccb8a90a0bb65da4775112c6b23ae2fdf08165dd"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/pantheon-systems/terminus/zipball/7c53289d7912ec1d8b6db57d7bf450b2a720ed33",
-            "reference": "7c53289d7912ec1d8b6db57d7bf450b2a720ed33",
+            "url": "https://api.github.com/repos/pantheon-systems/terminus/zipball/ccb8a90a0bb65da4775112c6b23ae2fdf08165dd",
+            "reference": "ccb8a90a0bb65da4775112c6b23ae2fdf08165dd",
             "shasum": ""
         },
         "require": {
@@ -1161,7 +1161,7 @@
             "sebastian/phpcpd": "*",
             "squizlabs/php_codesniffer": "2.*"
         },
-        "time": "2016-02-26 19:36:38",
+        "time": "2016-03-03 19:46:00",
         "bin": [
             "bin/terminus.bat",
             "bin/terminus"
@@ -1172,13 +1172,12 @@
                 "dev-master": "0.0.x-dev"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-0": {
                 "Terminus": "php"
             }
         },
-        "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
         ],
@@ -1190,6 +1189,10 @@
             "pantheon",
             "terminus",
             "wordpress"
-        ]
+        ],
+        "support": {
+            "source": "https://github.com/pantheon-systems/terminus/tree/change/enhanced_configurator",
+            "issues": "https://github.com/pantheon-systems/terminus/issues"
+        }
     }
 ]

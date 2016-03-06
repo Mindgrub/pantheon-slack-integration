@@ -3,7 +3,6 @@
 namespace Terminus\Utils;
 
 use ArrayIterator;
-use Symfony\Component\Yaml\Yaml;
 use Terminus\Caches\FileCache;
 use Terminus\Commands\TerminusCommand;
 use Terminus\Dispatcher;
@@ -27,7 +26,7 @@ function checkCurrentVersion() {
   $request  = new Request();
   $url      = 'https://api.github.com/repos/pantheon-systems/terminus/releases';
   $url     .= '?per_page=1';
-  $response = $request->simpleRequest($url, ['absolute_url' => true]);
+  $response = $request->request($url, ['absolute_url' => true]);
   $release  = array_shift($response['data']);
   $cache    = new FileCache();
   $cache->putData(
@@ -66,32 +65,6 @@ function checkForUpdate($logger) {
         $e->getReplacements()
       );
     }
-  }
-}
-
-/**
- * Sets constants necessary for the proper functioning of Terminus
- *
- * @return void
- */
-function defineConstants() {
-  if (!defined('Terminus')) {
-    define('Terminus', true);
-  }
-  $default_constants = Yaml::parse(
-    file_get_contents(TERMINUS_ROOT . '/config/constants.yml')
-  );
-  foreach ($default_constants as $var_name => $default) {
-    if (isset($_SERVER[$var_name]) && ($_SERVER[$var_name] != '')) {
-      define($var_name, $_SERVER[$var_name]);
-    } else if (!defined($var_name)) {
-      define($var_name, $default);
-    }
-  }
-  date_default_timezone_set(TERMINUS_TIME_ZONE);
-
-  if (!defined('TERMINUS_SCRIPT')) {
-    define('TERMINUS_SCRIPT', 'php/Terminus.php');
   }
 }
 
@@ -143,19 +116,6 @@ function getVendorPaths() {
     TERMINUS_ROOT . '/vendor'
   ];
   return $vendor_paths;
-}
-
-/**
- * Imports environment variables
- *
- * @return void
- */
-function importEnvironmentVariables() {
-  //Load environment variables from __DIR__/.env
-  if (file_exists(getcwd() . '/.env')) {
-    $env = new \Dotenv\Dotenv(getcwd());
-    $env->load();
-  }
 }
 
 /**
