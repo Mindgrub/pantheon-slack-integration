@@ -101,3 +101,62 @@ function _pantheon_slack_terminus_sites() {
     echo "FAIL";
   }
 }
+
+/**
+ * Set's a default Pantheon site for a channel to make things easier for future
+ * commands.
+ *
+ * @param array $args
+ */
+function _pantheon_slack_terminus_set_channel_default($args = []) {
+  $site_name = array_shift($args);
+  // @TODO -- Is the site name valid?
+  if ($existing = _pantheon_slack_terminus_lookup_channel($_POST['channel_id'])) {
+    $existing->field_pantheon_site_name->set($site_name);
+    $existing->save();
+  } else {
+    $entity = entity_create('pantheon_slack_channel', array('type' => 'pantheon_slack_channel'));
+    $wrapper = entity_metadata_wrapper('pantheon_slack_channel', $entity);
+    $wrapper->field_slack_team_id->set($_POST['team_id']);
+    $wrapper->field_slack_team_domain->set($_POST['team_domain']);
+    $wrapper->field_slack_channel_id->set($_POST['channel_id']);
+    $wrapper->field_slack_channel_name->set($_POST['channel_name']);
+    $wrapper->field_pantheon_site_name->set($site_name);
+    $wrapper->save();
+  }
+
+  echo t('Set site @site as default for channel @channel', array('@site' => $site_name, '@channel' => $_POST['channel_name']));
+}
+
+/**
+ * Tells Slack what the default Pantheon site is for a channel.
+ */
+function _pantheon_slack_terminus_get_channel_default() {
+  if ($existing = _pantheon_slack_terminus_lookup_channel($_POST['channel_id'])) {
+    echo t('Default site for @channel is @site', array('@channel' => $_POST['channel_name'], '@site' => $existing->field_pantheon_site_name->value()));
+  } else {
+    echo t('There is no default site set for this channel.');
+  }
+}
+
+/**
+ * Looks a Slack channel up in the database.
+ *
+ * @param string $channel_id
+ * @return bool|\EntityMetadataWrapper
+ */
+function _pantheon_slack_terminus_lookup_channel($channel_id = '') {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'pantheon_slack_channel')
+    ->propertyCondition('type', 'pantheon_slack_channel')
+    ->fieldCondition('field_slack_channel_id', 'value', $channel_id)
+    ->range(0, 1);
+
+  $results = $query->execute();
+
+  if (!empty($results['pantheon_slack_channel'])) {
+    return entity_metadata_wrapper('pantheon_slack_channel', key($results['pantheon_slack_channel']));
+  }
+
+  return FALSE;
+}

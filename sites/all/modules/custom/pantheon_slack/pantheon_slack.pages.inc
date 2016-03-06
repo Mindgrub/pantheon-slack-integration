@@ -29,7 +29,11 @@ function pantheon_slack_slack_callback() {
           break;
 
         case 'set-channel-default':
-          echo 'CHANNEL DEFAULT';
+          _pantheon_slack_terminus_set_channel_default($command_args);
+          break;
+
+        case 'get-channel-default':
+          _pantheon_slack_terminus_get_channel_default();
           break;
 
         case 'deploy':
