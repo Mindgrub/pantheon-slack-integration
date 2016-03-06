@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Pantheon Slack Feature feature.
+ */
+
+include_once 'pantheon_slack_feature.features.inc';
