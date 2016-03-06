@@ -20,9 +20,20 @@ function _pantheon_slack_terminus_auth($args = []) {
   $is_authenticated = _pantheon_slack_terminus_authenticate_user_by_token($args[0]);
 
   if ($is_authenticated) {
-    // @TODO -- Does this user exist already?
-    $entity = entity_create('pantheon_slack_user', array('type' => 'pantheon_slack_user'));
-    $wrapper = entity_metadata_wrapper('pantheon_slack_user', $entity);
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'pantheon_slack_user')
+      ->propertyCondition('type', 'pantheon_slack_user')
+      ->fieldCondition('field_slack_team_id', 'value', $_POST['team_id'])
+      ->fieldCondition('field_slack_user_id', 'value', $_POST['user_id'])
+      ->range(0, 1);
+
+    $result = $query->execute();
+    if (!empty($result['pantheon_slack_user'])) {
+      $wrapper = entity_metadata_wrapper('pantheon_slack_user', key($result['pantheon_slack_user']));
+    } else {
+      $entity = entity_create('pantheon_slack_user', array('type' => 'pantheon_slack_user'));
+      $wrapper = entity_metadata_wrapper('pantheon_slack_user', $entity);
+    }
     $wrapper->field_slack_team_id->set($_POST['team_id']);
     $wrapper->field_slack_team_domain->set($_POST['team_domain']);
     $wrapper->field_slack_user_id->set($_POST['user_id']);
