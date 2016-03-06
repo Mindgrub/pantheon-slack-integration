@@ -8,6 +8,7 @@
 
 use Terminus\Models\Auth;
 use Terminus\Models\Collections\Sites;
+use Terminus\Models\Site;
 
 /**
  * Callback for auth command from Slack.
@@ -85,8 +86,15 @@ function _pantheon_slack_terminus_sites() {
   if (_pantheon_slack_terminus_authenticate_user_by_id($_POST['user_id'])) {
     $sites = new Sites();
     $user_sites = $sites->all();
-    var_dump($user_sites);
+    $site_names = [];
+    foreach ($user_sites as $site) {
+
+      $site_names[] = $site->get('name');
+    }
+
+    echo implode('\n', $site_names);
   } else {
+    // @TODO -- add handling for failed authentication and include help text.
     echo "FAIL";
   }
 }

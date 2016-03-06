@@ -13,6 +13,10 @@ function pantheon_slack_slack_callback() {
     if (!isset($command_args[0])) {
       echo "Invalid request.  Include sub-command";
     } else {
+      $cache_uri = 'temporary://terminus/cache/' . $_POST['user_id'];
+      file_prepare_directory($cache_uri, FILE_CREATE_DIRECTORY);
+      $cache_path = drupal_realpath($cache_uri);
+      putenv('TERMINUS_CACHE_DIR=' . $cache_path);
       module_load_include('inc', 'pantheon_slack', 'pantheon_slack.terminus');
       $command = array_shift($command_args);
       switch ($command) {
