@@ -108,7 +108,7 @@ function _pantheon_slack_terminus_sites() {
     foreach ($user_sites as $site) {
       $site_names[] = $site->get('name');
     }
-    _pantheon_slack_send_output_to_slack(implode('\n', $site_names));
+    _pantheon_slack_send_output_to_slack(implode("\n", $site_names));
   } else {
     _pantheon_slack_send_output_to_slack(t("Failure authenticating to Pantheon.  Try running `/pantheon help` for details about authenticating."));
   }
