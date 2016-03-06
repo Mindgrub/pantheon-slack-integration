@@ -17,7 +17,11 @@ function pantheon_slack_slack_callback() {
       $command = array_shift($command_args);
       switch ($command) {
         case 'auth':
-          echo 'AUTH';
+          _pantheon_slack_terminus_auth($command_args);
+          break;
+
+        case 'sites':
+          _pantheon_slack_terminus_sites();
           break;
 
         case 'set-channel-default':
