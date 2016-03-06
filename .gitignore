@@ -43,3 +43,4 @@ Thumbs.db
 ##########
 .sass-cache
 .idea/
+sites/default/settings.local.php
