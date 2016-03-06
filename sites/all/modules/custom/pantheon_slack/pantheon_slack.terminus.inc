@@ -106,8 +106,7 @@ function _pantheon_slack_terminus_sites() {
     }
     _pantheon_slack_send_output_to_slack(implode('\n', $site_names));
   } else {
-    // @TODO -- add handling for failed authentication and include help text.
-    _pantheon_slack_send_output_to_slack(t("FAIL"));
+    _pantheon_slack_send_output_to_slack(t("Failure authenticating to Pantheon.  Try running `/pantheon help` for details about authenticating."));
   }
 }
 
@@ -234,7 +233,7 @@ function _pantheon_slack_terminus_deploy_site($site_name, $env) {
       _pantheon_slack_send_output_to_slack(t("There was an error triggering your deployment."));
     }
   } else {
-    _pantheon_slack_send_output_to_slack(t("Failure authenticating to Pantheon."));
+    _pantheon_slack_send_output_to_slack(t("Failure authenticating to Pantheon.  Try running `/pantheon help` for details about authenticating."));
   }
 }
 
