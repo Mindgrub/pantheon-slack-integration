@@ -37,7 +37,11 @@ function pantheon_slack_slack_callback() {
           break;
 
         case 'deploy':
-          echo 'DEPLOY';
+          _pantheon_slack_terminus_deploy_default_site($command_args);
+          break;
+
+        case 'deploy-site':
+          _pantheon_slack_terminus_deploy_specific_site($command_args);
           break;
 
         default:
