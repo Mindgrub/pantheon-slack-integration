@@ -17,6 +17,10 @@ use Terminus\Models\Collections\Environments;
  * @return bool
  */
 function _pantheon_slack_terminus_auth($args = []) {
+  if (count($args) < 1) {
+    _pantheon_slack_send_output_to_slack(t('Invalid number of arguments.  `/pantheon auth <machine-token>`'));
+    return FALSE;
+  }
   $is_authenticated = _pantheon_slack_terminus_authenticate_user_by_token($args[0]);
 
   if ($is_authenticated) {
@@ -117,6 +121,10 @@ function _pantheon_slack_terminus_sites() {
  * @param array $args
  */
 function _pantheon_slack_terminus_set_channel_default($args = []) {
+  if (count($args) < 1) {
+    _pantheon_slack_send_output_to_slack(t('Invalid number of arguments.  `/pantheon set-channel-default <site-name>`'));
+    return;
+  }
   $site_name = array_shift($args);
   // We don't care whether the site name is valid or not.  Maybe the person adding
   // it doesn't have access to the site for whatever reason.
@@ -178,6 +186,10 @@ function _pantheon_slack_terminus_lookup_channel($channel_id) {
 function _pantheon_slack_terminus_deploy_default_site($args = []) {
   if ($existing = _pantheon_slack_terminus_lookup_channel($_POST['channel_id'])) {
     $site_name = $existing->field_pantheon_site_name->value();
+    if (count($args) < 1) {
+      _pantheon_slack_send_output_to_slack(t('Invalid number of arguments.  `/pantheon deploy <environment>`'));
+      return;
+    }
     $env = array_shift($args);
     _pantheon_slack_terminus_deploy_site($site_name, $env);
   } else {
@@ -191,10 +203,13 @@ function _pantheon_slack_terminus_deploy_default_site($args = []) {
  * @param array $args
  */
 function _pantheon_slack_terminus_deploy_specific_site($args = []) {
-  $site_name = array_shift($args);
-  $env = array_shift($args);
-  // @TODO -- handling for if this parameter doesn't exist?
-  _pantheon_slack_terminus_deploy_site($site_name, $env);
+  if (count($args) <2) {
+    _pantheon_slack_send_output_to_slack(t('Invalid number of arguments.  `/pantheon deploy-site <site-name> <environment>`'));
+  } else {
+    $site_name = array_shift($args);
+    $env = array_shift($args);
+    _pantheon_slack_terminus_deploy_site($site_name, $env);
+  }
 }
 
 /**
@@ -240,6 +255,8 @@ function _pantheon_slack_terminus_deploy_site($site_name, $env) {
 
 function _pantheon_slack_send_output_to_slack($message, $visible_to_all = FALSE) {
   $callback_url = $_POST['response_url'];
+
+  $message = str_replace(array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $message);
 
   $output = [
     'response_type' => $visible_to_all ? 'in_channel' : 'ephemeral',
