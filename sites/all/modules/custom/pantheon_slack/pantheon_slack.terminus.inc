@@ -41,9 +41,9 @@ function _pantheon_slack_terminus_auth($args = []) {
     $wrapper->field_pantheon_machine_token->set($args[0]);
     $wrapper->save();
 
-    echo "You've successfully connected your Slack account with Pantheon.";
+    _pantheon_slack_send_output_to_slack(t("You've successfully connected your Slack account with Pantheon."));
   } else {
-    echo "There was an error connecting your Slack account with Pantheon.  Please double check your machine token and try again.";
+    _pantheon_slack_send_output_to_slack(t("There was an error connecting your Slack account with Pantheon.  Please double check your machine token and try again."));
   }
 
   return $is_authenticated;
@@ -102,14 +102,12 @@ function _pantheon_slack_terminus_sites() {
     $user_sites = $sites->all();
     $site_names = [];
     foreach ($user_sites as $site) {
-
       $site_names[] = $site->get('name');
     }
-    // @TODO -- add handling for if it took > 3 seconds to get sites from Pantheon.
-    echo implode('\n', $site_names);
+    _pantheon_slack_send_output_to_slack(implode('\n', $site_names));
   } else {
     // @TODO -- add handling for failed authentication and include help text.
-    echo "FAIL";
+    _pantheon_slack_send_output_to_slack(t("FAIL"));
   }
 }
 
@@ -136,7 +134,7 @@ function _pantheon_slack_terminus_set_channel_default($args = []) {
     $wrapper->save();
   }
 
-  echo t('Set site @site as default for channel @channel', array('@site' => $site_name, '@channel' => $_POST['channel_name']));
+  _pantheon_slack_send_output_to_slack(t('Set site @site as default for channel @channel', array('@site' => $site_name, '@channel' => $_POST['channel_name'])));
 }
 
 /**
@@ -144,9 +142,9 @@ function _pantheon_slack_terminus_set_channel_default($args = []) {
  */
 function _pantheon_slack_terminus_get_channel_default() {
   if ($existing = _pantheon_slack_terminus_lookup_channel($_POST['channel_id'])) {
-    echo t('Default site for @channel is @site', array('@channel' => $_POST['channel_name'], '@site' => $existing->field_pantheon_site_name->value()));
+    _pantheon_slack_send_output_to_slack(t('Default site for @channel is @site', array('@channel' => $_POST['channel_name'], '@site' => $existing->field_pantheon_site_name->value())));
   } else {
-    echo t('There is no default site set for this channel.');
+    _pantheon_slack_send_output_to_slack(t('There is no default site set for this channel.'));
   }
 }
 
@@ -183,7 +181,7 @@ function _pantheon_slack_terminus_deploy_default_site($args = []) {
     $env = array_shift($args);
     _pantheon_slack_terminus_deploy_site($site_name, $env);
   } else {
-    echo t('There is no default site set for this channel.');
+    _pantheon_slack_send_output_to_slack(t('There is no default site set for this channel.'));
   }
 }
 
@@ -213,16 +211,16 @@ function _pantheon_slack_terminus_deploy_site($site_name, $env) {
       $site = $sites->get($site_name);
       $environments = new Environments(['site' => $site]);
       if (!in_array($env, array('test', 'live'))) {
-        echo t('You can only deploy to the test or live environment.');
+        _pantheon_slack_send_output_to_slack(t('You can only deploy to the test or live environment.'));
         return;
       }
       $environment = $environments->get($env);
       if (!$environment || !in_array($environment->get('id'), array('test', 'live'))) {
-        echo t('You can only deploy to the test or live environment.');
+        _pantheon_slack_send_output_to_slack(t('You can only deploy to the test or live environment.'));
         return;
       }
       if (!$environment->hasDeployableCode()) {
-        echo t('There is nothing to deploy.');
+        _pantheon_slack_send_output_to_slack(t('There is nothing to deploy.'));
         return;
       }
       $params = array(
@@ -231,11 +229,29 @@ function _pantheon_slack_terminus_deploy_site($site_name, $env) {
         'annotation'     => t('Deployed via Slack by user @user_name.', array('@user_name' => $_POST['user_name'])),
       );
       $environment->deploy($params);
-      echo "Deployment initiated";
+      _pantheon_slack_send_output_to_slack(t("Deployment initiated"), TRUE);
     } catch (\Terminus\Exceptions\TerminusException $e) {
-      echo "There was an error triggering your deployment.";
+      _pantheon_slack_send_output_to_slack(t("There was an error triggering your deployment."));
     }
   } else {
-    echo "Failure authenticating to Pantheon.";
+    _pantheon_slack_send_output_to_slack(t("Failure authenticating to Pantheon."));
+  }
+}
+
+function _pantheon_slack_send_output_to_slack($message, $visible_to_all = FALSE) {
+  $callback_url = $_POST['response_url'];
+
+  $output = [
+    'response_type' => $visible_to_all ? 'in_channel' : 'ephemeral',
+    'text' => $message,
+  ];
+
+  if (variable_get('pantheon_slack_enable_output_debug', FALSE)) {
+    echo $message;
+  } else {
+    drupal_http_request($callback_url, [
+      'method' => 'POST',
+      'data' => drupal_json_encode($output),
+    ]);
   }
 }
