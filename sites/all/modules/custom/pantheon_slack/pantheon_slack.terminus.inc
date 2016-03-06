@@ -118,7 +118,8 @@ function _pantheon_slack_terminus_sites() {
  */
 function _pantheon_slack_terminus_set_channel_default($args = []) {
   $site_name = array_shift($args);
-  // @TODO -- Is the site name valid?
+  // We don't care whether the site name is valid or not.  Maybe the person adding
+  // it doesn't have access to the site for whatever reason.
   if ($existing = _pantheon_slack_terminus_lookup_channel($_POST['channel_id'])) {
     $existing->field_pantheon_site_name->set($site_name);
     $existing->save();
