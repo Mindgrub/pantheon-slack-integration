@@ -11,6 +11,206 @@ function pantheon_slack_feature_field_default_field_instances() {
   $field_instances = array();
 
   // Exported field_instance:
+  // 'pantheon_slack_channel-pantheon_slack_channel-field_pantheon_site_name'.
+  $field_instances['pantheon_slack_channel-pantheon_slack_channel-field_pantheon_site_name'] = array(
+    'bundle' => 'pantheon_slack_channel',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 4,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'pantheon_slack_channel',
+    'field_name' => 'field_pantheon_site_name',
+    'label' => 'Pantheon Site Name',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 7,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'pantheon_slack_channel-pantheon_slack_channel-field_slack_channel_id'.
+  $field_instances['pantheon_slack_channel-pantheon_slack_channel-field_slack_channel_id'] = array(
+    'bundle' => 'pantheon_slack_channel',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'pantheon_slack_channel',
+    'field_name' => 'field_slack_channel_id',
+    'label' => 'Slack Channel ID',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 5,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'pantheon_slack_channel-pantheon_slack_channel-field_slack_channel_name'.
+  $field_instances['pantheon_slack_channel-pantheon_slack_channel-field_slack_channel_name'] = array(
+    'bundle' => 'pantheon_slack_channel',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 3,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'pantheon_slack_channel',
+    'field_name' => 'field_slack_channel_name',
+    'label' => 'Slack Channel Name',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'pantheon_slack_channel-pantheon_slack_channel-field_slack_team_domain'.
+  $field_instances['pantheon_slack_channel-pantheon_slack_channel-field_slack_team_domain'] = array(
+    'bundle' => 'pantheon_slack_channel',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'pantheon_slack_channel',
+    'field_name' => 'field_slack_team_domain',
+    'label' => 'Slack Team Domain',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'pantheon_slack_channel-pantheon_slack_channel-field_slack_team_id'.
+  $field_instances['pantheon_slack_channel-pantheon_slack_channel-field_slack_team_id'] = array(
+    'bundle' => 'pantheon_slack_channel',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 1,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'pantheon_slack_channel',
+    'field_name' => 'field_slack_team_id',
+    'label' => 'Slack Team ID',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance:
   // 'pantheon_slack_user-pantheon_slack_user-field_pantheon_machine_token'.
   $field_instances['pantheon_slack_user-pantheon_slack_user-field_pantheon_machine_token'] = array(
     'bundle' => 'pantheon_slack_user',
@@ -213,6 +413,9 @@ function pantheon_slack_feature_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Pantheon Machine Token');
+  t('Pantheon Site Name');
+  t('Slack Channel ID');
+  t('Slack Channel Name');
   t('Slack Team Domain');
   t('Slack Team ID');
   t('Slack User ID');

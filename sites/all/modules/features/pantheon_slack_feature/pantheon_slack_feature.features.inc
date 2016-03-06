@@ -9,6 +9,13 @@
  */
 function pantheon_slack_feature_eck_bundle_info() {
   $items = array(
+    'pantheon_slack_channel_pantheon_slack_channel' => array(
+      'machine_name' => 'pantheon_slack_channel_pantheon_slack_channel',
+      'entity_type' => 'pantheon_slack_channel',
+      'name' => 'pantheon_slack_channel',
+      'label' => 'Pantheon Slack Channel',
+      'config' => array(),
+    ),
     'pantheon_slack_user_pantheon_slack_user' => array(
       'machine_name' => 'pantheon_slack_user_pantheon_slack_user',
       'entity_type' => 'pantheon_slack_user',
@@ -25,6 +32,22 @@ function pantheon_slack_feature_eck_bundle_info() {
  */
 function pantheon_slack_feature_eck_entity_type_info() {
   $items = array(
+    'pantheon_slack_channel' => array(
+      'name' => 'pantheon_slack_channel',
+      'label' => 'Pantheon Slack Channel',
+      'properties' => array(
+        'created' => array(
+          'label' => 'Created',
+          'type' => 'integer',
+          'behavior' => 'created',
+        ),
+        'changed' => array(
+          'label' => 'Changed',
+          'type' => 'integer',
+          'behavior' => 'changed',
+        ),
+      ),
+    ),
     'pantheon_slack_user' => array(
       'name' => 'pantheon_slack_user',
       'label' => 'Pantheon Slack User',
