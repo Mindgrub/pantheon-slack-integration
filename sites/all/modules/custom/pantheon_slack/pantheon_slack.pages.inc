@@ -14,7 +14,9 @@ function pantheon_slack_slack_callback() {
       echo "Invalid request.  Include sub-command";
     } else {
       // Before we go any further, send Slack a 200 command.
-      drupal_add_http_header('Status', '200 OK');
+      echo "...Processing";
+      header("HTTP/1.1 200 OK");
+      ob_flush();
       $cache_uri = 'temporary://terminus/cache/' . $_POST['user_id'];
       file_prepare_directory($cache_uri, FILE_CREATE_DIRECTORY);
       $cache_path = drupal_realpath($cache_uri);
