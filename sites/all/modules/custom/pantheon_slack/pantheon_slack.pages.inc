@@ -14,9 +14,13 @@ function pantheon_slack_slack_callback() {
       echo "Invalid request.  Include sub-command";
     } else {
       // Before we go any further, send Slack a 200 command.
-      echo "...Processing";
-      header("HTTP/1.1 200 OK");
-      ob_flush();
+      header("Connection: close");
+      ob_start();
+      $size=ob_get_length();
+      header("Content-Length: $size");
+      ob_end_flush();
+      flush();
+      fastcgi_finish_request();
       $cache_uri = 'temporary://terminus/cache/' . $_POST['user_id'];
       file_prepare_directory($cache_uri, FILE_CREATE_DIRECTORY);
       $cache_path = drupal_realpath($cache_uri);
@@ -25,27 +29,27 @@ function pantheon_slack_slack_callback() {
       $command = array_shift($command_args);
       switch ($command) {
         case 'auth':
-          _pantheon_slack_terminus_auth($command_args);
+          register_shutdown_function('_pantheon_slack_terminus_auth', $command_args);
           break;
 
         case 'sites':
-          _pantheon_slack_terminus_sites();
+          register_shutdown_function('_pantheon_slack_terminus_sites');
           break;
 
         case 'set-channel-default':
-          _pantheon_slack_terminus_set_channel_default($command_args);
+          register_shutdown_function('_pantheon_slack_terminus_set_channel_default', $command_args);
           break;
 
         case 'get-channel-default':
-          _pantheon_slack_terminus_get_channel_default();
+          register_shutdown_function('_pantheon_slack_terminus_get_channel_default');
           break;
 
         case 'deploy':
-          _pantheon_slack_terminus_deploy_default_site($command_args);
+          register_shutdown_function('_pantheon_slack_terminus_deploy_default_site', $command_args);
           break;
 
         case 'deploy-site':
-          _pantheon_slack_terminus_deploy_specific_site($command_args);
+          register_shutdown_function('_pantheon_slack_terminus_deploy_specific_site', $command_args);
           break;
 
         default:
