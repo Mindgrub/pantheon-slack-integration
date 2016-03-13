@@ -243,8 +243,11 @@ function _pantheon_slack_terminus_deploy_site($site_name, $env) {
         'clear_cache'    => TRUE,
         'annotation'     => t('Deployed via Slack by user @user_name.', array('@user_name' => $_POST['user_name'])),
       );
-      $environment->deploy($params);
-      _pantheon_slack_send_output_to_slack(t("Deployment initiated"), TRUE);
+      _pantheon_slack_send_output_to_slack(t("Deployment initiated for @site by !@user", array('@site' => $site_name, '@user' => $_POST['user_name'])), TRUE);
+      $workflow = $environment->deploy($params);
+      $workflow->wait();
+      $message = _pantheon_slack_get_workflow_output($workflow, ['failure' => 'Deployment failed.']);
+      _pantheon_slack_send_output_to_slack($message, TRUE);
     } catch (\Terminus\Exceptions\TerminusException $e) {
       _pantheon_slack_send_output_to_slack(t("There was an error triggering your deployment."));
     }
@@ -253,6 +256,13 @@ function _pantheon_slack_terminus_deploy_site($site_name, $env) {
   }
 }
 
+/**
+ * Sends messages to Slack using the callback URL provided in the initial
+ * request.
+ *
+ * @param $message
+ * @param bool $visible_to_all
+ */
 function _pantheon_slack_send_output_to_slack($message, $visible_to_all = FALSE) {
   $callback_url = $_POST['response_url'];
 
@@ -271,4 +281,29 @@ function _pantheon_slack_send_output_to_slack($message, $visible_to_all = FALSE)
       'data' => drupal_json_encode($output),
     ]);
   }
+}
+
+/**
+ * A modified version of TerminusCommand/workflowOutput to allow us to send
+ * messages from the workflow back to Slack.
+ *
+ * @param $workflow
+ * @param array $messages
+ * @return string
+ */
+function _pantheon_slack_get_workflow_output($workflow, array $messages = []) {
+  if ($workflow->get('result') == 'succeeded') {
+    $message = $workflow->get('active_description');
+    if (isset($messages['success'])) {
+      $message = $messages['success'];
+    }
+  } else {
+    $message = 'Workflow failed.';
+    if (isset($messages['failure'])) {
+      $message = $messages['failure'];
+    } elseif (!is_null($final_task = $workflow->get('final_task'))) {
+      $message = $final_task->reason;
+    }
+  }
+  return $message;
 }
