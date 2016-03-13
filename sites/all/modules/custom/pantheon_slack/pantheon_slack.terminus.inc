@@ -243,7 +243,7 @@ function _pantheon_slack_terminus_deploy_site($site_name, $env) {
         'clear_cache'    => TRUE,
         'annotation'     => t('Deployed via Slack by user @user_name.', array('@user_name' => $_POST['user_name'])),
       );
-      _pantheon_slack_send_output_to_slack(t("Deployment initiated for @site by !@user", array('@site' => $site_name, '@user' => $_POST['user_name'])), TRUE);
+      _pantheon_slack_send_output_to_slack(t("Deployment initiated for @site by <@@user>", array('@site' => $site_name, '@user' => $_POST['user_id'])), TRUE);
       $workflow = $environment->deploy($params);
       $workflow->wait();
       $message = _pantheon_slack_get_workflow_output($workflow, ['failure' => 'Deployment failed.']);
