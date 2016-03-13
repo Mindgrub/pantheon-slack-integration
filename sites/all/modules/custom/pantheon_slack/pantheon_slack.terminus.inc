@@ -243,7 +243,7 @@ function _pantheon_slack_terminus_deploy_site($site_name, $env) {
         'clear_cache'    => TRUE,
         'annotation'     => t('Deployed via Slack by user @user_name.', array('@user_name' => $_POST['user_name'])),
       );
-      _pantheon_slack_send_output_to_slack(t("Deployment initiated for @site by <@@user>", array('@site' => $site_name, '@user' => $_POST['user_id'])), TRUE);
+      _pantheon_slack_send_output_to_slack(t("Deployment initiated for @site by <@@user>", array('@site' => $site_name, '@user' => $_POST['user_id'])), TRUE, FALSE);
       $workflow = $environment->deploy($params);
       $workflow->wait();
       $message = _pantheon_slack_get_workflow_output($workflow, ['failure' => 'Deployment failed.']);
@@ -263,10 +263,12 @@ function _pantheon_slack_terminus_deploy_site($site_name, $env) {
  * @param $message
  * @param bool $visible_to_all
  */
-function _pantheon_slack_send_output_to_slack($message, $visible_to_all = FALSE) {
+function _pantheon_slack_send_output_to_slack($message, $visible_to_all = FALSE, $escape = TRUE) {
   $callback_url = $_POST['response_url'];
 
-  $message = str_replace(array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $message);
+  if ($escape) {
+    $message = str_replace(array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $message);
+  }
 
   $output = [
     'response_type' => $visible_to_all ? 'in_channel' : 'ephemeral',
